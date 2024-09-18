@@ -5,9 +5,7 @@
   "author": "catprotocol.org",
   "license": "MIT",
   "type": "commonjs",
-  "bin": {
-    "cat-cli": "bin/cat.js"
-  },
+  "bin": "bin/cat.js",
   "scripts": {
     "build": "nest build",
     "prepublishOnly": "yarn build",
@@ -24,11 +22,11 @@
   },
   "dependencies": {
     "@bitcoinerlab/descriptors": "^2.2.0",
+    "@cat-protocol/cat-smartcontracts": "0.1.0",
     "@cmdcode/tapscript": "^1.4.6",
     "@nestjs/common": "^10.0.0",
     "@nestjs/core": "^10.0.0",
     "@nestjs/platform-express": "^10.0.0",
-    "@cat-protocol/cat-smartcontracts": "0.1.0",
     "@types/inquirer": "^8.1.3",
     "bigi": "^1.4.2",
     "bip32": "^4.0.0",
