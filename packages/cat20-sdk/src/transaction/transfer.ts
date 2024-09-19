@@ -1,6 +1,7 @@
-import {AddressType, btc, TokenContract} from "../common";
+import {AddressType, btc, getTokenContractP2TR, SupportedNetwork, TokenContract, toP2tr} from "../common";
 import {UTXO} from 'scrypt-ts';
 import {EcKeyService,} from "../utils/eckey";
+import {tokenInfoParse} from "../utils/paramsUtils";
 
 
 export type CatTxParams = {
@@ -24,8 +25,16 @@ export interface TransferParams {
 
 
 export function transfer(param: CatTxParams) {
-
     const ecKey = new EcKeyService(param.privateKey, param.addressType)
+    console.info(ecKey)
+
+    const txParams: TransferParams = param.data
+
+    let metadata = tokenInfoParse(txParams.tokenMetadata, SupportedNetwork.fractalMainnet);
+
+    const minterP2TR = toP2tr(metadata.minterAddr);
+
+    const {p2tr: tokenP2TR, tapScript: tokenTapScript} = getTokenContractP2TR(minterP2TR);
 
 
 }
