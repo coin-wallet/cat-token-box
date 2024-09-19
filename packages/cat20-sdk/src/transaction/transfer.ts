@@ -1,7 +1,19 @@
-import {AddressType, btc, getTokenContractP2TR, SupportedNetwork, TokenContract, toP2tr} from "../common";
+import {
+    AddressType,
+    btc,
+    getGuardsP2TR,
+    getTokenContractP2TR,
+    GuardContract,
+    Postage,
+    SupportedNetwork,
+    TokenContract,
+    toP2tr,
+    toStateScript
+} from "../common";
 import {UTXO} from 'scrypt-ts';
 import {EcKeyService,} from "../utils/eckey";
 import {tokenInfoParse} from "../utils/paramsUtils";
+import {GuardProto, ProtocolState} from "@cat-protocol/cat-smartcontracts";
 
 
 export type CatTxParams = {
@@ -36,6 +48,84 @@ export function transfer(param: CatTxParams) {
 
     const {p2tr: tokenP2TR, tapScript: tokenTapScript} = getTokenContractP2TR(minterP2TR);
 
+    const commitResult = createGuardContract(
+        ecKey,
+        txParams.feeUtxo,
+        txParams. feeRate,
+        txParams.tokens,
+        tokenP2TR,
+        txParams.changeAddress,
+    );
+
+
+    if (commitResult === null) {
+        return null;
+    }
+
 
 }
 
+
+export function createGuardContract(
+    wallet: EcKeyService,
+    feeutxo: UTXO,
+    feeRate: number,
+    tokens: TokenContract[],
+    tokenP2TR: string,
+    changeAddress: btc.Address,
+) {
+    const {p2tr: guardP2TR, tapScript: guardTapScript} = getGuardsP2TR();
+
+    const protocolState = ProtocolState.getEmptyState();
+    const realState = GuardProto.createEmptyState();
+    realState.tokenScript = tokenP2TR;
+
+    for (let i = 0; i < tokens.length; i++) {
+        realState.inputTokenAmountArray[i] = tokens[i].state.data.amount;
+    }
+
+    protocolState.updateDataList(0, GuardProto.toByteString(realState));
+
+    const commitTx = new btc.Transaction()
+        .from(feeutxo)
+        .addOutput(
+            new btc.Transaction.Output({
+                satoshis: 0,
+                script: toStateScript(protocolState),
+            }),
+        )
+        .addOutput(
+            new btc.Transaction.Output({
+                satoshis: Postage.GUARD_POSTAGE,
+                script: guardP2TR,
+            }),
+        )
+        .feePerByte(feeRate)
+        .change(changeAddress);
+
+    if (commitTx.getChangeOutput() === null) {
+        console.error('Insufficient satoshis balance!');
+        return null;
+    }
+    commitTx.outputs[2].satoshis -= 1;
+    wallet.signTx(commitTx);
+
+    const contact: GuardContract = {
+        utxo: {
+            txId: commitTx.id,
+            outputIndex: 1,
+            script: commitTx.outputs[1].script.toHex(),
+            satoshis: commitTx.outputs[1].satoshis,
+        },
+        state: {
+            protocolState,
+            data: realState,
+        },
+    };
+
+    return {
+        commitTx,
+        contact,
+        guardTapScript,
+    };
+}
