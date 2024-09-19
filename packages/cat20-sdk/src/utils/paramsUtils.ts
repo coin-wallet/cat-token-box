@@ -1,5 +1,11 @@
-import {getTokenContractP2TR, OpenMinterTokenInfo, p2tr2Address, TokenMetadata, toP2tr} from "../common";
-import {SupportedNetwork} from "../common/cli-config";
+import {
+    getTokenContractP2TR,
+    OpenMinterTokenInfo,
+    p2tr2Address,
+    SupportedNetwork,
+    TokenMetadata,
+    toP2tr
+} from "../common";
 
 
 export function tokenInfoParse(tokenStr: string, network: SupportedNetwork): TokenMetadata {

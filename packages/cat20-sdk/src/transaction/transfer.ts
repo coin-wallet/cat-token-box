@@ -28,6 +28,5 @@ export function transfer(param: CatTxParams) {
     const ecKey = new EcKeyService(param.privateKey, param.addressType)
 
 
-
 }
 

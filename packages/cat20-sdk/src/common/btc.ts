@@ -2,4 +2,4 @@
 // @ts-ignore
 import btc = require('bitcore-lib-inquisition');
 
-export { btc };
+export {btc};
