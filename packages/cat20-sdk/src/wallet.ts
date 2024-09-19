@@ -1,20 +1,16 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import btc = require('bitcore-lib-inquisition');
-import BIP32Factory from 'bip32';
-import * as ecc from 'tiny-secp256k1';
-import {
-    AddressType,
-    toXOnly,
-} from './common';
-import { hash160 } from 'scrypt-ts';
+import {AddressType, toXOnly,} from './common';
+import {hash160} from 'scrypt-ts';
 
 export class WalletService {
     private readonly privateKey: string;
     private readonly addressType: AddressType;
+
     constructor(
-         privateKey: string,
-         addressType: AddressType,
+        privateKey: string,
+        addressType: AddressType,
     ) {
         this.privateKey = privateKey;
         this.addressType = addressType;
@@ -47,7 +43,7 @@ export class WalletService {
     }
 
     getTweakedPrivateKey(): btc.PrivateKey {
-        const { tweakedPrivKey } = this.getPrivateKey().createTapTweak();
+        const {tweakedPrivKey} = this.getPrivateKey().createTapTweak();
         return btc.PrivateKey.fromBuffer(tweakedPrivKey);
     }
 
