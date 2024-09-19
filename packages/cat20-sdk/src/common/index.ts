@@ -1,6 +1,6 @@
 export * from './metadata';
 export * from './utils';
-export * from './wallet';
+export * from './walletEnum';
 export * from './contact';
 export * from './minter';
 export * from './postage';

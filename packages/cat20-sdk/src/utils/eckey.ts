@@ -4,7 +4,7 @@ import btc = require('bitcore-lib-inquisition');
 import {AddressType, toXOnly,} from '../common';
 import {hash160} from 'scrypt-ts';
 
-export class WalletService {
+export class EcKeyService {
     private readonly privateKey: string;
     private readonly addressType: AddressType;
 
