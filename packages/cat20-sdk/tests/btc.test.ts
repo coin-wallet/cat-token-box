@@ -1,4 +1,4 @@
-import {WalletService} from "../src/wallet";
+import {WalletService} from "../src/utils/eckey";
 import {AddressType} from "../src/common";
 
 describe("bitcoin", () => {

@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import btc = require('bitcore-lib-inquisition');
-import {AddressType, toXOnly,} from './common';
+import {AddressType, toXOnly,} from '../common';
 import {hash160} from 'scrypt-ts';
 
 export class WalletService {

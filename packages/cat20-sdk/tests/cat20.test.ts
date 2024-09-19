@@ -1,4 +1,4 @@
-import {tokenInfoParse} from "../src/utils";
+import {tokenInfoParse} from "../src/utils/paramsUtils";
 
 
 describe("cat20 ", () => {
