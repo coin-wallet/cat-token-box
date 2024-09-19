@@ -1,4 +1,4 @@
-import {tokenInfoParse} from "../src/utils/paramsUtils";
+import {feeUtxoParse, tokenInfoParse, tokenUtxoParse} from "../src/utils/paramsUtils";
 import {SupportedNetwork} from "../src/common";
 
 
@@ -10,6 +10,100 @@ describe("cat20 params", () => {
 
         console.log(tokenInfoParse(tokenStr, SupportedNetwork.fractalMainnet))
 
+    })
+
+    test("getFeeUtxos", async () => {
+        const tokenStr = `[
+          {
+            "txid": "050fd76a622c8965570c310236580672ddd9aad9525a617c65b337412ec0a065",
+            "vout": 1,
+            "satoshi": 181724336,
+            "scriptType": "5120",
+            "scriptPk": "5120f0513064fe1e5b5c31bedff43b943f2f1211d14ab2891687241b138d214888e3",
+            "codeType": 9,
+            "address": "bc1p7pgnqe87red4cvd7ml6rh9pl9ufpr522k2y3dpeyrvfc6g2g3r3s3ae9dr",
+            "height": 4194303,
+            "idx": 35546,
+            "isOpInRBF": false,
+            "isSpent": false,
+            "inscriptions": []
+          },
+          {
+            "txid": "934677e1b69daea7f4f3fab53e6d9a70103089debf4126e9f0bfb7821864738f",
+            "vout": 0,
+            "satoshi": 5100000,
+            "scriptType": "5120",
+            "scriptPk": "5120f0513064fe1e5b5c31bedff43b943f2f1211d14ab2891687241b138d214888e3",
+            "codeType": 9,
+            "address": "bc1p7pgnqe87red4cvd7ml6rh9pl9ufpr522k2y3dpeyrvfc6g2g3r3s3ae9dr",
+            "height": 31577,
+            "idx": 2380,
+            "isOpInRBF": false,
+            "isSpent": false,
+            "inscriptions": []
+          },
+          {
+            "txid": "c1083cb00478ebf1e4ec1951319e0f2bc8361aeb5a1b643cba86b31cfaf3b613",
+            "vout": 1,
+            "satoshi": 33684401,
+            "scriptType": "5120",
+            "scriptPk": "5120f0513064fe1e5b5c31bedff43b943f2f1211d14ab2891687241b138d214888e3",
+            "codeType": 9,
+            "address": "bc1p7pgnqe87red4cvd7ml6rh9pl9ufpr522k2y3dpeyrvfc6g2g3r3s3ae9dr",
+            "height": 31568,
+            "idx": 314,
+            "isOpInRBF": false,
+            "isSpent": false,
+            "inscriptions": []
+          }
+          ]`;
+        const tokenContracts = feeUtxoParse(tokenStr)
+        console.log(tokenContracts.length)
+    })
+
+    test("getTokens", async () => {
+        const tokenStr = `[
+          {
+            "utxo": {
+              "txId": "80ea11690349ddb6b554f2f7be40905d0b2ed4d0ac272b752aa52c3ee5dc6e58",
+              "outputIndex": 1,
+              "script": "5120fdc45725edcc1023ae2a36f5e67485ba1bb1cdc290b92421f629cf1c24c64585",
+              "satoshis": "330"
+            },
+            "txoStateHashes": [
+              "b21d642f5efa4da5070fffdb9b8773f5fdc39fb0",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "state": {
+              "address": "83587562c89dd70c0bed2e9c6197b5e598498148",
+              "amount": "500"
+            }
+          },
+          {
+            "utxo": {
+              "txId": "a3a0e6641b3978da3c0b65dd14df7cdfeda499fe4264693db57c78b22e737345",
+              "outputIndex": 3,
+              "script": "5120fdc45725edcc1023ae2a36f5e67485ba1bb1cdc290b92421f629cf1c24c64585",
+              "satoshis": "330"
+            },
+            "txoStateHashes": [
+              "347d6ae4b9998699cf48cf20acfb4d81902b0a13",
+              "c04905e7e9d4d4f17e27441fda94b5fbe283a7db",
+              "b21d642f5efa4da5070fffdb9b8773f5fdc39fb0",
+              "",
+              ""
+            ],
+            "state": {
+              "address": "83587562c89dd70c0bed2e9c6197b5e598498148",
+              "amount": "500"
+            }
+          }
+        ]`;
+        const tokenContracts = tokenUtxoParse(tokenStr)
+        console.log(tokenContracts.length)
     })
 })
 ;
