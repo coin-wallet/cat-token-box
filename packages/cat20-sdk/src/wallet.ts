@@ -1,24 +1,20 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import btc = require('bitcore-lib-inquisition');
-import * as bip39 from 'bip39';
 import BIP32Factory from 'bip32';
 import * as ecc from 'tiny-secp256k1';
-import { Inject, Injectable } from '@nestjs/common';
 import {
     AddressType,
     toXOnly,
 } from './common';
 import { hash160 } from 'scrypt-ts';
 
-const bip32 = BIP32Factory(ecc);
-
 export class WalletService {
     private readonly privateKey: string;
     private readonly addressType: AddressType;
     constructor(
          privateKey: string,
-        addressType: AddressType,
+         addressType: AddressType,
     ) {
         this.privateKey = privateKey;
         this.addressType = addressType;
