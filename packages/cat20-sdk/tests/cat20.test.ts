@@ -1,5 +1,5 @@
 import {CatTxParams, transfer} from "../src/transaction/transfer";
-import {AddressType, btc} from "../src/common";
+import {AddressType} from "../src/common";
 import {feeUtxoParse, tokenUtxoParse} from "../src/utils/paramsUtils";
 import {pickLargeFeeUtxo} from "../src/utils/utxo";
 
@@ -106,6 +106,9 @@ describe("cat20", () => {
                 tokens: tokenContracts,
                 feeUtxo: feeUtxo,
                 feeRate: 10,
+                changeAddress: "bc1pw0cqcrlsgsa778f8nu2thkfxzsrqv0gw6prtrzx6xjrjng8wlv4sa5pfqj",
+                receiver: "bc1pw0cqcrlsgsa778f8nu2thkfxzsrqv0gw6prtrzx6xjrjng8wlv4sa5pfqj",
+                tokenAmount: 1000,
             }
         }
         transfer(param)

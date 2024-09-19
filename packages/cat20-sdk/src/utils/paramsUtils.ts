@@ -2,7 +2,9 @@ import {
     getTokenContractP2TR,
     OpenMinterTokenInfo,
     p2tr2Address,
-    SupportedNetwork, TokenContract,
+    scaleByDecimals,
+    SupportedNetwork,
+    TokenContract,
     TokenMetadata,
     toP2tr
 } from "../common";
@@ -46,6 +48,7 @@ export function feeUtxoParse(tokenUtxos: string): UTXO[] {
         };
     });
 }
+
 export function tokenUtxoParse(feeUtxos: string): Array<TokenContract> {
     const utxos = JSON.parse(feeUtxos);
 
@@ -71,4 +74,15 @@ export function tokenUtxoParse(feeUtxos: string): Array<TokenContract> {
 
         return r;
     })
+}
+
+
+export function scaleConfig(config: OpenMinterTokenInfo): OpenMinterTokenInfo {
+    const clone = Object.assign({}, config);
+
+    clone.max = scaleByDecimals(config.max, config.decimals);
+    clone.premine = scaleByDecimals(config.premine, config.decimals);
+    clone.limit = scaleByDecimals(config.limit, config.decimals);
+
+    return clone;
 }

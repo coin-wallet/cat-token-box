@@ -3,7 +3,7 @@ import {
     btc,
     getGuardsP2TR,
     getTokenContractP2TR,
-    GuardContract,
+    GuardContract, OpenMinterTokenInfo,
     Postage,
     SupportedNetwork,
     TokenContract,
@@ -12,8 +12,9 @@ import {
 } from "../common";
 import {UTXO} from 'scrypt-ts';
 import {EcKeyService,} from "../utils/eckey";
-import {tokenInfoParse} from "../utils/paramsUtils";
+import {scaleConfig, tokenInfoParse} from "../utils/paramsUtils";
 import {GuardProto, ProtocolState} from "@cat-protocol/cat-smartcontracts";
+import Decimal from 'decimal.js';
 
 
 export type CatTxParams = {
@@ -28,9 +29,9 @@ export interface TransferParams {
     feeUtxo: UTXO, // 暂时只支持一个feeUtxo输入
     feeRate: number,
     tokens: TokenContract[],
-    changeAddress: btc.Address,
-    receiver: btc.Address,
-    tokenAmount: bigint,
+    changeAddress: string,
+    receiver: string,
+    tokenAmount: number,
     preTxMap: Map<string, string>,
     prePreTxMap: Map<string, string>,
 }
@@ -48,10 +49,34 @@ export function transfer(param: CatTxParams) {
 
     const {p2tr: tokenP2TR, tapScript: tokenTapScript} = getTokenContractP2TR(minterP2TR);
 
+    // 地址和金额
+    let receiver: btc.Address;
+    let amount: bigint;
+    try {
+        receiver = btc.Address.fromString(txParams.receiver);
+        if (receiver.type !== 'taproot') {
+            console.error(`Invalid address type: ${receiver.type}`);
+            return;
+        }
+    } catch (error) {
+        console.error(`Invalid receiver address:  `, txParams.receiver);
+        return;
+    }
+
+    const scaledInfo = scaleConfig(metadata.info as OpenMinterTokenInfo);
+    try {
+        const d = new Decimal(txParams.tokenAmount).mul(Math.pow(10, scaledInfo.decimals));
+        amount = BigInt(d.toString());
+    } catch (error) {
+        console.error(`Invalid receiver address:  `, txParams.tokenAmount);
+        return;
+    }
+
+
     const commitResult = createGuardContract(
         ecKey,
         txParams.feeUtxo,
-        txParams. feeRate,
+        txParams.feeRate,
         txParams.tokens,
         tokenP2TR,
         txParams.changeAddress,
