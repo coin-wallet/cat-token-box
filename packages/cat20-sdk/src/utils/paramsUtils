@@ -1,7 +1,7 @@
 import {getTokenContractP2TR, OpenMinterTokenInfo, p2tr2Address, TokenMetadata, toP2tr} from "../common";
 
 
-export function TokenInfoParse(tokenStr: string): TokenMetadata {
+export function tokenInfoParse(tokenStr: string): TokenMetadata {
     const token: TokenMetadata = JSON.parse(tokenStr);
 
     const tokenInfo: OpenMinterTokenInfo = JSON.parse(JSON.stringify(token.info));
