@@ -3,17 +3,19 @@ import {
     btc,
     getGuardsP2TR,
     getTokenContractP2TR,
-    GuardContract, OpenMinterTokenInfo,
+    GuardContract,
+    OpenMinterTokenInfo,
     Postage,
     SupportedNetwork,
     TokenContract,
     toP2tr,
-    toStateScript
+    toStateScript,
+    toTokenAddress
 } from "../common";
 import {UTXO} from 'scrypt-ts';
 import {EcKeyService,} from "../utils/eckey";
 import {scaleConfig, tokenInfoParse} from "../utils/paramsUtils";
-import {GuardProto, ProtocolState} from "@cat-protocol/cat-smartcontracts";
+import {CAT20Proto, CAT20State, GuardProto, MAX_INPUT, ProtocolState} from "@cat-protocol/cat-smartcontracts";
 import Decimal from 'decimal.js';
 
 
@@ -86,6 +88,84 @@ export function transfer(param: CatTxParams) {
     if (commitResult === null) {
         return null;
     }
+    const {commitTx, contact: guardContract, guardTapScript} = commitResult;
+
+    const newState = ProtocolState.getEmptyState();
+
+    const receiverTokenState = CAT20Proto.create(
+        amount,
+        toTokenAddress(receiver),
+    );
+
+    newState.updateDataList(0, CAT20Proto.toByteString(receiverTokenState));
+
+    const tokenInputAmount = txParams.tokens.reduce(
+        (acc, t) => acc + t.state.data.amount,
+        0n,
+    );
+
+    const changeTokenInputAmount = tokenInputAmount - amount;
+
+    let changeTokenState: null | CAT20State = null;
+
+    if (changeTokenInputAmount > 0n) {
+        const tokenChangeAddress = ecKey.getTokenAddress();
+        changeTokenState = CAT20Proto.create(
+            changeTokenInputAmount,
+            tokenChangeAddress,
+        );
+        newState.updateDataList(1, CAT20Proto.toByteString(changeTokenState));
+    }
+
+    const newFeeUtxo = {
+        txId: commitTx.id,
+        outputIndex: 2,
+        script: commitTx.outputs[2].script.toHex(),
+        satoshis: commitTx.outputs[2].satoshis,
+    };
+
+    const inputUtxos = [
+        ...txParams.tokens.map((t) => t.utxo),
+        guardContract.utxo,
+        newFeeUtxo,
+    ];
+
+    if (inputUtxos.length > MAX_INPUT) {
+        throw new Error('to much input');
+    }
+
+    const revealTx = new btc.Transaction()
+        .from(inputUtxos)
+        .addOutput(
+            new btc.Transaction.Output({
+                satoshis: 0,
+                script: toStateScript(newState),
+            }),
+        )
+        .addOutput(
+            new btc.Transaction.Output({
+                satoshis: Postage.TOKEN_POSTAGE,
+                script: tokenP2TR,
+            }),
+        )
+        .feePerByte(txParams.feeRate);
+
+    if (changeTokenState) {
+        revealTx.addOutput(
+            new btc.Transaction.Output({
+                satoshis: Postage.TOKEN_POSTAGE,
+                script: tokenP2TR,
+            }),
+        );
+    }
+
+    const satoshiChangeScript = btc.Script.fromAddress(txParams.changeAddress);
+    revealTx.addOutput(
+        new btc.Transaction.Output({
+            satoshis: 0,
+            script: satoshiChangeScript,
+        }),
+    );
 
 
 }
@@ -133,7 +213,8 @@ export function createGuardContract(
         return null;
     }
     commitTx.outputs[2].satoshis -= 1;
-    wallet.signTx(commitTx);
+    // todo 实际数据需要放开 本地测试先注释
+    //  wallet.signTx(commitTx);
 
     const contact: GuardContract = {
         utxo: {
