@@ -58,13 +58,13 @@ export async function transfer(param: CatTxParams) {
     let receiver: btc.Address;
     let amount: bigint;
     try {
-        receiver = btc.Address.fromString(txParams.receiver);
+        receiver = btc.Address.fromString(txParams.toAddress);
         if (receiver.type !== 'taproot') {
             console.error(`Invalid address type: ${receiver.type}`);
             return;
         }
     } catch (error) {
-        console.error(`Invalid receiver address:  `, txParams.receiver);
+        console.error(`Invalid receiver address:  `, txParams.toAddress);
         return;
     }
 

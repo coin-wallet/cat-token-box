@@ -25,7 +25,7 @@ export interface TransferParams {
     feeRate: number,
     tokens: TokenContract[],
     changeAddress: string,
-    receiver: string,
+    toAddress: string,
     tokenAmount: number,
     tokenPrevTxs: TokenPrevTx[]
 }
