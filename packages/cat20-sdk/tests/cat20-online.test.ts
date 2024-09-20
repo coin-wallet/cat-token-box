@@ -37,15 +37,8 @@ describe("cat20-online", () => {
             "txid": "ff6f5b62827382f698c121e4d42a6aa6a4f9331245e6fc1b079eebee06e512c0",
             "vout": 4,
             "satoshi": 279806723,
-            "scriptType": "5120",
             "scriptPk": "5120991aa7dd18daf34865086c8a7c134ac83bee0fc9217ec346d138247a2d6e6982",
-            "codeType": 9,
-            "address": "bc1pnyd20hgcmte5seggdj98cy62eqa7ur7fy9lvx3k38qj85ttwdxpqft47ex",
-            "height": 4194303,
-            "idx": 35546,
-            "isOpInRBF": false,
-            "isSpent": false,
-            "inscriptions": []
+            "address": "bc1pnyd20hgcmte5seggdj98cy62eqa7ur7fy9lvx3k38qj85ttwdxpqft47ex"
           }
           ]`;
         const utxos = feeUtxoParse(utxoInputsStr)
