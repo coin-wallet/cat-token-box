@@ -67,7 +67,7 @@ describe("cat20-online", () => {
                 tokenMetadata: tokenMetadata,
                 tokens: tokenContracts,
                 feeUtxo: feeUtxo,
-                feeRate: 10,
+                feeRate: 600,
                 changeAddress: "bc1pnyd20hgcmte5seggdj98cy62eqa7ur7fy9lvx3k38qj85ttwdxpqft47ex",
                 receiver: "bc1pnyd20hgcmte5seggdj98cy62eqa7ur7fy9lvx3k38qj85ttwdxpqft47ex",
                 tokenAmount: 10,
