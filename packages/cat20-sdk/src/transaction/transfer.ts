@@ -231,7 +231,7 @@ export async function transfer(param: CatTxParams) {
         guardState: guardContract.state.data,
     };
 
-    let vsize = 500
+    let vsize = 500*5
 
     const satoshiChangeAmount =
         revealTx.inputAmount -
