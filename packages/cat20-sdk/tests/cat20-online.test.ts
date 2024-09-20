@@ -1,5 +1,5 @@
-import {CatTxParams, TokenPrevTx, transfer} from "../src/transaction/transfer";
-import {AddressType} from "../src/common";
+import {transfer} from "../src/transaction/transfer";
+import {AddressType, CatTxParams, TokenPrevTx} from "../src/common";
 import {feeUtxoParse, tokenUtxoParse} from "../src/utils/paramsUtils";
 import {pickLargeFeeUtxo} from "../src/utils/utxo";
 
@@ -33,13 +33,12 @@ describe("cat20-online", () => {
         const tokenContracts = tokenUtxoParse(tokenInputsStr)
 
         const utxoInputsStr = `[
-          {
-            "txid": "ff6f5b62827382f698c121e4d42a6aa6a4f9331245e6fc1b079eebee06e512c0",
-            "vout": 4,
-            "satoshi": 279806723,
-            "scriptPk": "5120991aa7dd18daf34865086c8a7c134ac83bee0fc9217ec346d138247a2d6e6982",
-            "address": "bc1pnyd20hgcmte5seggdj98cy62eqa7ur7fy9lvx3k38qj85ttwdxpqft47ex"
-          }
+              {
+                "txid": "ff6f5b62827382f698c121e4d42a6aa6a4f9331245e6fc1b079eebee06e512c0",
+                "vout": 4,
+                "amount": 279806723,
+                "address": "bc1pnyd20hgcmte5seggdj98cy62eqa7ur7fy9lvx3k38qj85ttwdxpqft47ex"
+              }
           ]`;
         const utxos = feeUtxoParse(utxoInputsStr)
         let feeUtxo = pickLargeFeeUtxo(utxos);

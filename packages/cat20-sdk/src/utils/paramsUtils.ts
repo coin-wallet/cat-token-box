@@ -1,4 +1,5 @@
 import {
+    btc,
     getTokenContractP2TR,
     OpenMinterTokenInfo,
     p2tr2Address,
@@ -40,11 +41,12 @@ export function tokenInfoParse(tokenStr: string, network: SupportedNetwork): Tok
 export function feeUtxoParse(tokenUtxos: string): UTXO[] {
     const utxos = JSON.parse(tokenUtxos);
     return utxos.map((utxo: any) => {
+        let scriptPk = btc.Script.fromAddress(utxo.address).toHex();
         return {
             txId: utxo.txid,
             outputIndex: utxo.vout,
-            script: utxo.scriptPk,
-            satoshis: utxo.satoshi,
+            script: scriptPk,
+            satoshis: utxo.amount,
         };
     });
 }

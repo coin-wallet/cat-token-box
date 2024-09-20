@@ -1,7 +1,6 @@
 import {
-    AddressType,
     btc,
-    callToBufferList,
+    callToBufferList, CatTxParams,
     CHANGE_MIN_POSTAGE,
     getDummySigner,
     getDummyUTXO,
@@ -15,7 +14,7 @@ import {
     toP2tr,
     toStateScript,
     toTokenAddress,
-    toTxOutpoint,
+    toTxOutpoint, TransferParams,
     verifyContract
 } from "../common";
 import {fill, int2ByteString, MethodCallOptions, PubKey, toByteString, UTXO,} from 'scrypt-ts';
@@ -42,34 +41,6 @@ import {
 } from "@cat-protocol/cat-smartcontracts";
 import Decimal from 'decimal.js';
 import {TokenTx, validatePrevTx} from "../utils/prevTx";
-
-export type CatTxParams = {
-    privateKey: string;
-    addressType: AddressType,
-    data: any;
-};
-
-export type TxIdHex = {
-    txId: string;
-    txHex: string;
-}
-
-export type TokenPrevTx = {
-    prevTx: string,
-    prevPrevTx: string,
-}
-
-// transfer
-export interface TransferParams {
-    tokenMetadata: string
-    feeUtxo: UTXO, // 暂时只支持一个feeUtxo输入
-    feeRate: number,
-    tokens: TokenContract[],
-    changeAddress: string,
-    receiver: string,
-    tokenAmount: number,
-    tokenPrevTxs: TokenPrevTx[]
-}
 
 
 export async function transfer(param: CatTxParams) {
@@ -231,7 +202,7 @@ export async function transfer(param: CatTxParams) {
         guardState: guardContract.state.data,
     };
 
-    let vsize = 500*5
+    let vsize = 500 * 5
 
     const satoshiChangeAmount =
         revealTx.inputAmount -
