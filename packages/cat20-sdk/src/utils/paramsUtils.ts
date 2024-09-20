@@ -1,17 +1,7 @@
-import {
-    btc,
-    getTokenContractP2TR,
-    OpenMinterTokenInfo,
-    p2tr2Address,
-    scaleByDecimals,
-    SupportedNetwork,
-    TokenContract,
-    TokenMetadata,
-    toP2tr
-} from "../common";
+import {btc, OpenMinterTokenInfo, SupportedNetwork, TokenContract, TokenMetadata,} from "../common";
 import {ProtocolState, ProtocolStateList} from "@cat-protocol/cat-smartcontracts";
 import {UTXO} from "scrypt-ts";
-
+import {getTokenContractP2TR, p2tr2Address, scaleByDecimals, toP2tr} from "./utils";
 
 export function tokenInfoParse(tokenStr: string, network: SupportedNetwork): TokenMetadata {
     const token: TokenMetadata = JSON.parse(tokenStr);

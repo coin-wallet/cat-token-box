@@ -1,4 +1,5 @@
-import {btc, p2tr2Address, script2P2TR, SupportedNetwork, TokenMetadata} from "../common";
+import {btc, SupportedNetwork, TokenMetadata} from "../common";
+import {p2tr2Address, script2P2TR} from "./utils";
 
 export type TokenTx = {
     prevTx: btc.Transaction,

@@ -2,17 +2,10 @@ import {
     btc,
     CatTxParams,
     CHANGE_MIN_POSTAGE,
-    getTokenContractP2TR,
     GuardContract,
-    OpenMinterTokenInfo,
-    Postage,
-    resetTx,
+    OpenMinterTokenInfo, Postage,
     SupportedNetwork,
     TokenContract,
-    toP2tr,
-    toStateScript,
-    toTokenAddress,
-    toTxOutpoint,
     TransferParams
 } from "../common";
 import {int2ByteString, toByteString,} from 'scrypt-ts';
@@ -32,6 +25,7 @@ import Decimal from 'decimal.js';
 import {TokenTx, validatePrevTx} from "../utils/prevTx";
 import {pickLargeFeeUtxo} from "../utils/utxo";
 import {createGuardContract, unlockGuard, unlockToken} from "./functions";
+import {getTokenContractP2TR, resetTx, toP2tr, toStateScript, toTokenAddress, toTxOutpoint,} from "../utils";
 
 
 export async function transfer(param: CatTxParams) {
