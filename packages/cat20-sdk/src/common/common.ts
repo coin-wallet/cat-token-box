@@ -26,7 +26,8 @@ export interface TransferParams {
     changeAddress: string,
     toAddress: string,
     tokenAmount: number,
-    tokenPrevTxs: TokenPrevTx[]
+    tokenPrevTxs: TokenPrevTx[],
+    verifyScript?: boolean,
 }
 
 export type UtxoInput = {

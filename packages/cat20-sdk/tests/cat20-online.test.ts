@@ -57,7 +57,7 @@ describe("cat20-online", () => {
                 feeRate: 800,
                 changeAddress: "bc1pnyd20hgcmte5seggdj98cy62eqa7ur7fy9lvx3k38qj85ttwdxpqft47ex", // FB找零地址
                 toAddress: "bc1pnyd20hgcmte5seggdj98cy62eqa7ur7fy9lvx3k38qj85ttwdxpqft47ex", // cat接收to地址
-                tokenAmount: 10,
+                tokenAmount: 10, // cat20 number, 10 DOGE
                 tokenPrevTxs: tokenPrevTxs
             }
         }
