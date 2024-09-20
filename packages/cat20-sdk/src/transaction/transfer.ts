@@ -5,7 +5,7 @@ import {
     CHANGE_MIN_POSTAGE,
     getDummySigner,
     getDummyUTXO,
-    getGuardsP2TR, getSigner,
+    getGuardsP2TR,
     getTokenContractP2TR,
     GuardContract,
     OpenMinterTokenInfo,
@@ -403,7 +403,7 @@ async function unlockToken(
         statesHashRoot: protocolState.hashRoot,
         txoStateHashes: protocolState.stateHashList,
     };
-    console.log( token)
+    console.log(token)
 
 
     const tokenCall = await token.methods.unlock(
