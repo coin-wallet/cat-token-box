@@ -1,9 +1,9 @@
-import {OpenMinterV2State} from '@cat-protocol/cat-smartcontracts';
 import {
-    ProtocolState,
-    OpenMinterState,
     CAT20State,
     GuardConstState,
+    OpenMinterState,
+    OpenMinterV2State,
+    ProtocolState
 } from '@cat-protocol/cat-smartcontracts';
 import {UTXO} from 'scrypt-ts';
 
