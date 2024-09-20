@@ -1,6 +1,7 @@
 import {
     btc,
-    callToBufferList, CatTxParams,
+    callToBufferList,
+    CatTxParams,
     CHANGE_MIN_POSTAGE,
     getDummySigner,
     getDummyUTXO,
@@ -14,12 +15,13 @@ import {
     toP2tr,
     toStateScript,
     toTokenAddress,
-    toTxOutpoint, TransferParams,
+    toTxOutpoint,
+    TransferParams,
     verifyContract
 } from "../common";
 import {fill, int2ByteString, MethodCallOptions, PubKey, toByteString, UTXO,} from 'scrypt-ts';
 import {EcKeyService,} from "../utils/eckey";
-import {scaleConfig, tokenInfoParse} from "../utils/paramsUtils";
+import {feeUtxoParse, scaleConfig, tokenInfoParse} from "../utils/paramsUtils";
 import {
     CAT20,
     CAT20Proto,
@@ -41,6 +43,7 @@ import {
 } from "@cat-protocol/cat-smartcontracts";
 import Decimal from 'decimal.js';
 import {TokenTx, validatePrevTx} from "../utils/prevTx";
+import {pickLargeFeeUtxo} from "../utils/utxo";
 
 
 export async function transfer(param: CatTxParams) {
@@ -76,12 +79,13 @@ export async function transfer(param: CatTxParams) {
         console.error(`Invalid receiver address:  `, txParams.tokenAmount);
         return;
     }
-
+    const feeUtxos = feeUtxoParse(param.data.feeInputs)
+    let feeUtxo = pickLargeFeeUtxo(feeUtxos);
 
     let tokens = txParams.tokens;
     const commitResult = createGuardContract(
         ecKey,
-        txParams.feeUtxo,
+        feeUtxo,
         txParams.feeRate,
         tokens,
         tokenP2TR,

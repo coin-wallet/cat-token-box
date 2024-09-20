@@ -1,7 +1,6 @@
 import {transfer} from "../src/transaction/transfer";
 import {AddressType, CatTxParams, TokenPrevTx} from "../src/common";
-import {feeUtxoParse, tokenUtxoParse} from "../src/utils/paramsUtils";
-import {pickLargeFeeUtxo} from "../src/utils/utxo";
+import {tokenUtxoParse} from "../src/utils/paramsUtils";
 
 describe("cat20-online", () => {
     test("transfer", async () => {
@@ -9,7 +8,16 @@ describe("cat20-online", () => {
 
         const tokenMetadata = '{"minterAddr":"bc1pdsdqlk3qcs70dukmmjce8l9hejt866vnnea2m9257x2t7kcqa5ls0zan7c","tokenAddr":"bc1p5kt27kd8d36fgycffppf2d0hhavqg46nanvmk258qldgqzgr3mgqqf8lvh","info":{"max":"21000000","name":"doge","limit":"1000","symbol":"DOGE","premine":"0","decimals":2,"minterMd5":"21cbd2e538f2b6cc40ee180e174f1e25"},"tokenId":"f31030e87fec4a7e47fab51c842b1168e1396a89ec9ab6743e7a72495199cc3c_0","revealTxid":"6322dfe59973dea004ee23c5de6688ebba06010d6ee7e5d58ac86936bf6aa20e","revealHeight":7443,"genesisTxid":"f31030e87fec4a7e47fab51c842b1168e1396a89ec9ab6743e7a72495199cc3c","name":"doge","symbol":"DOGE","decimals":2,"minterPubKey":"6c1a0fda20c43cf6f2dbdcb193fcb7cc967d69939e7aad9554f194bf5b00ed3f","tokenPubKey":"a596af59a76c7494130948429535f7bf58045753ecd9bb2a8707da8009038ed0"}'
 
-        const tokenInputsStr = `[
+        const feeInputs = [
+            {
+                txId: "ff6f5b62827382f698c121e4d42a6aa6a4f9331245e6fc1b079eebee06e512c0",
+                vOut: 4,
+                amount: 279806723,
+                address: "bc1pnyd20hgcmte5seggdj98cy62eqa7ur7fy9lvx3k38qj85ttwdxpqft47ex"
+            }
+        ];
+
+        const tokenInputs = `[
               {
                 "utxo": {
                   "txId": "ff6f5b62827382f698c121e4d42a6aa6a4f9331245e6fc1b079eebee06e512c0",
@@ -30,18 +38,7 @@ describe("cat20-online", () => {
                 }
               }
             ]`;
-        const tokenContracts = tokenUtxoParse(tokenInputsStr)
-
-        const utxoInputsStr = `[
-              {
-                "txid": "ff6f5b62827382f698c121e4d42a6aa6a4f9331245e6fc1b079eebee06e512c0",
-                "vout": 4,
-                "amount": 279806723,
-                "address": "bc1pnyd20hgcmte5seggdj98cy62eqa7ur7fy9lvx3k38qj85ttwdxpqft47ex"
-              }
-          ]`;
-        const utxos = feeUtxoParse(utxoInputsStr)
-        let feeUtxo = pickLargeFeeUtxo(utxos);
+        const tokenContracts = tokenUtxoParse(tokenInputs)
 
         const tokenPrevTxs: TokenPrevTx[] = [
             {
@@ -56,10 +53,10 @@ describe("cat20-online", () => {
             data: {
                 tokenMetadata: tokenMetadata,
                 tokens: tokenContracts,
-                feeUtxo: feeUtxo,
+                feeInputs: feeInputs, // 只传一个input，支付两笔FB手续费
                 feeRate: 800,
-                changeAddress: "bc1pnyd20hgcmte5seggdj98cy62eqa7ur7fy9lvx3k38qj85ttwdxpqft47ex",
-                toAddress: "bc1pnyd20hgcmte5seggdj98cy62eqa7ur7fy9lvx3k38qj85ttwdxpqft47ex",
+                changeAddress: "bc1pnyd20hgcmte5seggdj98cy62eqa7ur7fy9lvx3k38qj85ttwdxpqft47ex", // FB找零地址
+                toAddress: "bc1pnyd20hgcmte5seggdj98cy62eqa7ur7fy9lvx3k38qj85ttwdxpqft47ex", // cat接收to地址
                 tokenAmount: 10,
                 tokenPrevTxs: tokenPrevTxs
             }

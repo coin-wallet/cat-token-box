@@ -1,6 +1,5 @@
 import {AddressType} from "./cat20Enum";
 import {TokenContract} from "./contact";
-import {UTXO,} from 'scrypt-ts';
 
 export type CatTxParams = {
     privateKey: string;
@@ -21,11 +20,18 @@ export type TokenPrevTx = {
 // transfer
 export interface TransferParams {
     tokenMetadata: string
-    feeUtxo: UTXO, // 暂时只支持一个feeUtxo输入
+    feeInputs: UtxoInput[]
     feeRate: number,
     tokens: TokenContract[],
     changeAddress: string,
     toAddress: string,
     tokenAmount: number,
     tokenPrevTxs: TokenPrevTx[]
+}
+
+export type UtxoInput = {
+    txId: string
+    vOut: number
+    amount: number  // min unit: satoshi
+    address?: string
 }
