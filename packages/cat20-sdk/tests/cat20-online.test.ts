@@ -72,10 +72,10 @@ describe("cat20-online", () => {
                 receiver: "bc1pnyd20hgcmte5seggdj98cy62eqa7ur7fy9lvx3k38qj85ttwdxpqft47ex",
                 tokenAmount: 10,
                 preTxMap: preTxMap,
-                prePreTxMap:prePreTxMap
+                prePreTxMap: prePreTxMap
             }
         }
-        transfer(param)
+        await transfer(param)
 
 
     })

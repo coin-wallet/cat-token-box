@@ -62,7 +62,7 @@ export interface TransferParams {
 }
 
 
-export function transfer(param: CatTxParams) {
+export async function transfer(param: CatTxParams) {
     const ecKey = new EcKeyService(param.privateKey, param.addressType)
 
     const txParams: TransferParams = param.data
@@ -248,7 +248,7 @@ export function transfer(param: CatTxParams) {
 
     for (let i = 0; i < tokens.length; i++) {
         // ignore changeInfo when transfer token
-        const res = unlockToken(
+        const res = await unlockToken(
             ecKey,
             tokens[i],
             i,
@@ -266,7 +266,7 @@ export function transfer(param: CatTxParams) {
             return null;
         }
     }
-    const res = unlockGuard(
+    const res = await unlockGuard(
         guardContract,
         guardInfo,
         guardInputIndex,
@@ -278,13 +278,16 @@ export function transfer(param: CatTxParams) {
         txCtxs[guardInputIndex],
         false,
     );
+
     if (!res) {
         return null;
     }
 
     ecKey.signTx(revealTx);
 
+
     console.log("===========================")
+    console.log(revealTx)
 
 
 }
@@ -387,7 +390,6 @@ async function unlockToken(
         contractInputIndex: 0n,
     };
 
-
     const backtraceInfo = getBackTraceInfo(
         prevTokenTx,
         prevPrevTokenTx,
@@ -403,8 +405,6 @@ async function unlockToken(
         statesHashRoot: protocolState.hashRoot,
         txoStateHashes: protocolState.stateHashList,
     };
-    console.log(token)
-
 
     const tokenCall = await token.methods.unlock(
         tokenUnlockArgs,
