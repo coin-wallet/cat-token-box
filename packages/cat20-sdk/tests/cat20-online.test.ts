@@ -3,93 +3,46 @@ import {AddressType} from "../src/common";
 import {feeUtxoParse, tokenUtxoParse} from "../src/utils/paramsUtils";
 import {pickLargeFeeUtxo} from "../src/utils/utxo";
 
-describe("cat20", () => {
+describe("cat20-online", () => {
     test("transfer", async () => {
-        const privateKey = "L37qpvGk4vqKd3iBMAvaCNfgVJQKpc6qebKeAVk4BCpc9vy42dW7"
+        const privateKey = "xxxxxx"
 
-        const tokenMetadata = '{"minterAddr":"bc1pqw9ncs4sna0ndh85ux5dhh9swueyjql23t4em8j0smywkqsngfmsn7gmua","tokenAddr":"bc1plhz9wf0desgz8t32xm67vay9hgdmrnwzjzujgg0k9883cfxxgkzs20qfd5","info":{"max":"21000000","name":"cat","limit":"5","symbol":"CAT","premine":"0","decimals":2,"minterMd5":"21cbd2e538f2b6cc40ee180e174f1e25"},"tokenId":"45ee725c2c5993b3e4d308842d87e973bf1951f5f7a804b21e4dd964ecd12d6b_0","revealTxid":"9a3fcb5a8344f53f2ba580f7d488469346bff9efe7780fbbf8d3490e3a3a0cd7","revealHeight":6540,"genesisTxid":"45ee725c2c5993b3e4d308842d87e973bf1951f5f7a804b21e4dd964ecd12d6b","name":"cat","symbol":"CAT","decimals":2,"minterPubKey":"038b3c42b09f5f36dcf4e1a8dbdcb077324903ea8aeb9d9e4f86c8eb02134277","tokenPubKey":"fdc45725edcc1023ae2a36f5e67485ba1bb1cdc290b92421f629cf1c24c64585"}';
+        const tokenMetadata = '{"minterAddr":"bc1pdsdqlk3qcs70dukmmjce8l9hejt866vnnea2m9257x2t7kcqa5ls0zan7c","tokenAddr":"bc1p5kt27kd8d36fgycffppf2d0hhavqg46nanvmk258qldgqzgr3mgqqf8lvh","info":{"max":"21000000","name":"doge","limit":"1000","symbol":"DOGE","premine":"0","decimals":2,"minterMd5":"21cbd2e538f2b6cc40ee180e174f1e25"},"tokenId":"f31030e87fec4a7e47fab51c842b1168e1396a89ec9ab6743e7a72495199cc3c_0","revealTxid":"6322dfe59973dea004ee23c5de6688ebba06010d6ee7e5d58ac86936bf6aa20e","revealHeight":7443,"genesisTxid":"f31030e87fec4a7e47fab51c842b1168e1396a89ec9ab6743e7a72495199cc3c","name":"doge","symbol":"DOGE","decimals":2,"minterPubKey":"6c1a0fda20c43cf6f2dbdcb193fcb7cc967d69939e7aad9554f194bf5b00ed3f","tokenPubKey":"a596af59a76c7494130948429535f7bf58045753ecd9bb2a8707da8009038ed0"}'
 
         const tokenInputsStr = `[
-          {
-            "utxo": {
-              "txId": "80ea11690349ddb6b554f2f7be40905d0b2ed4d0ac272b752aa52c3ee5dc6e58",
-              "outputIndex": 1,
-              "script": "5120fdc45725edcc1023ae2a36f5e67485ba1bb1cdc290b92421f629cf1c24c64585",
-              "satoshis": "330"
-            },
-            "txoStateHashes": [
-              "b21d642f5efa4da5070fffdb9b8773f5fdc39fb0",
-              "",
-              "",
-              "",
-              ""
-            ],
-            "state": {
-              "address": "83587562c89dd70c0bed2e9c6197b5e598498148",
-              "amount": "500"
-            }
-          },
-          {
-            "utxo": {
-              "txId": "a3a0e6641b3978da3c0b65dd14df7cdfeda499fe4264693db57c78b22e737345",
-              "outputIndex": 3,
-              "script": "5120fdc45725edcc1023ae2a36f5e67485ba1bb1cdc290b92421f629cf1c24c64585",
-              "satoshis": "330"
-            },
-            "txoStateHashes": [
-              "347d6ae4b9998699cf48cf20acfb4d81902b0a13",
-              "c04905e7e9d4d4f17e27441fda94b5fbe283a7db",
-              "b21d642f5efa4da5070fffdb9b8773f5fdc39fb0",
-              "",
-              ""
-            ],
-            "state": {
-              "address": "83587562c89dd70c0bed2e9c6197b5e598498148",
-              "amount": "500"
-            }
-          }
-        ]`;
+              {
+                "utxo": {
+                  "txId": "ff6f5b62827382f698c121e4d42a6aa6a4f9331245e6fc1b079eebee06e512c0",
+                  "outputIndex": 3,
+                  "script": "5120a596af59a76c7494130948429535f7bf58045753ecd9bb2a8707da8009038ed0",
+                  "satoshis": "330"
+                },
+                "txoStateHashes": [
+                  "82fe99bdc279e395167143d68168258688098fcc",
+                  "7d345c05948faa2a06fb254c39bae38f53fc36dc",
+                  "44876a0c881ea808e71b0ba8ef75b82dc1f64a9c",
+                  "",
+                  ""
+                ],
+                "state": {
+                  "address": "c356c0b7212408fa4a4d8a7ee59e48f729cb1b1f",
+                  "amount": "1000"
+                }
+              }
+            ]`;
         const tokenContracts = tokenUtxoParse(tokenInputsStr)
 
         const utxoInputsStr = `[
           {
-            "txid": "050fd76a622c8965570c310236580672ddd9aad9525a617c65b337412ec0a065",
-            "vout": 1,
-            "satoshi": 181724336,
+            "txid": "ff6f5b62827382f698c121e4d42a6aa6a4f9331245e6fc1b079eebee06e512c0",
+            "vout": 4,
+            "satoshi": 279806723,
             "scriptType": "5120",
-            "scriptPk": "5120f0513064fe1e5b5c31bedff43b943f2f1211d14ab2891687241b138d214888e3",
+            "scriptPk": "5120991aa7dd18daf34865086c8a7c134ac83bee0fc9217ec346d138247a2d6e6982",
             "codeType": 9,
-            "address": "bc1p7pgnqe87red4cvd7ml6rh9pl9ufpr522k2y3dpeyrvfc6g2g3r3s3ae9dr",
+            "address": "bc1pnyd20hgcmte5seggdj98cy62eqa7ur7fy9lvx3k38qj85ttwdxpqft47ex",
             "height": 4194303,
             "idx": 35546,
-            "isOpInRBF": false,
-            "isSpent": false,
-            "inscriptions": []
-          },
-          {
-            "txid": "934677e1b69daea7f4f3fab53e6d9a70103089debf4126e9f0bfb7821864738f",
-            "vout": 0,
-            "satoshi": 5100000,
-            "scriptType": "5120",
-            "scriptPk": "5120f0513064fe1e5b5c31bedff43b943f2f1211d14ab2891687241b138d214888e3",
-            "codeType": 9,
-            "address": "bc1p7pgnqe87red4cvd7ml6rh9pl9ufpr522k2y3dpeyrvfc6g2g3r3s3ae9dr",
-            "height": 31577,
-            "idx": 2380,
-            "isOpInRBF": false,
-            "isSpent": false,
-            "inscriptions": []
-          },
-          {
-            "txid": "c1083cb00478ebf1e4ec1951319e0f2bc8361aeb5a1b643cba86b31cfaf3b613",
-            "vout": 1,
-            "satoshi": 33684401,
-            "scriptType": "5120",
-            "scriptPk": "5120f0513064fe1e5b5c31bedff43b943f2f1211d14ab2891687241b138d214888e3",
-            "codeType": 9,
-            "address": "bc1p7pgnqe87red4cvd7ml6rh9pl9ufpr522k2y3dpeyrvfc6g2g3r3s3ae9dr",
-            "height": 31568,
-            "idx": 314,
             "isOpInRBF": false,
             "isSpent": false,
             "inscriptions": []
@@ -115,11 +68,11 @@ describe("cat20", () => {
                 tokens: tokenContracts,
                 feeUtxo: feeUtxo,
                 feeRate: 10,
-                changeAddress: "bc1pw0cqcrlsgsa778f8nu2thkfxzsrqv0gw6prtrzx6xjrjng8wlv4sa5pfqj",
-                receiver: "bc1pw0cqcrlsgsa778f8nu2thkfxzsrqv0gw6prtrzx6xjrjng8wlv4sa5pfqj",
-                tokenAmount: 1000,
+                changeAddress: "bc1pnyd20hgcmte5seggdj98cy62eqa7ur7fy9lvx3k38qj85ttwdxpqft47ex",
+                receiver: "bc1pnyd20hgcmte5seggdj98cy62eqa7ur7fy9lvx3k38qj85ttwdxpqft47ex",
+                tokenAmount: 10,
                 preTxMap: preTxMap,
-                prePreTxMap: prePreTxMap
+                prePreTxMap:prePreTxMap
             }
         }
         transfer(param)

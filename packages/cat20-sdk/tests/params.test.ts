@@ -117,7 +117,7 @@ describe("cat20 params", () => {
 
         const metadata = tokenInfoParse(tokenStr, SupportedNetwork.fractalMainnet)
 
-        const valid = validatePrevTx(metadata,prevTxHex, prevPrevTxHex, SupportedNetwork.fractalMainnet)
+        const valid = validatePrevTx(metadata, prevTxHex, prevPrevTxHex, SupportedNetwork.fractalMainnet)
         console.log(valid)
         expect(valid).toBe(true)
 
@@ -134,7 +134,7 @@ describe("cat20 params", () => {
 
         const metadata = tokenInfoParse(tokenStr, SupportedNetwork.fractalMainnet)
 
-        const valid = validatePrevTx(metadata,prevTxHex, prevPrevTxHex, SupportedNetwork.fractalMainnet)
+        const valid = validatePrevTx(metadata, prevTxHex, prevPrevTxHex, SupportedNetwork.fractalMainnet)
         console.log(valid)
         expect(valid).toBe(false)
 

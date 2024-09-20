@@ -21,7 +21,7 @@ import {
     SmartContract,
     TestWallet,
     toByteString,
-    UTXO,
+    UTXO
 } from 'scrypt-ts';
 
 import {Tap} from '@cmdcode/tapscript';

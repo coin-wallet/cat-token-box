@@ -108,6 +108,13 @@ export class EcKeyService {
 
         for (let i = 0; i < tx.inputs.length; i++) {
             const input = tx.inputs[i];
+            console.log("input====> ",input )
+
+            // todo 删掉
+            if (input.hasWitnesses){
+                continue
+            }
+
             if (input.output.script.isWitnessPublicKeyHashOut()) {
                 const signatures = input.getSignatures(
                     tx,
@@ -130,6 +137,8 @@ export class EcKeyService {
                     undefined,
                     undefined,
                 );
+
+                console.log("signatures====> ",signatures )
 
                 tx.applySignature(signatures[0]);
             }
