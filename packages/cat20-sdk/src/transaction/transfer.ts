@@ -3,9 +3,12 @@ import {
     CatTxParams,
     CHANGE_MIN_POSTAGE,
     getTokenContractP2TR,
+    GuardContract,
     OpenMinterTokenInfo,
     Postage,
+    resetTx,
     SupportedNetwork,
+    TokenContract,
     toP2tr,
     toStateScript,
     toTokenAddress,
@@ -183,7 +186,21 @@ export async function transfer(param: CatTxParams) {
         guardState: guardContract.state.data,
     };
 
-    let vsize = 500 * 5
+    const vsize = await calcVsize(
+        ecKey,
+        tokens,
+        guardContract,
+        revealTx,
+        guardInfo,
+        tokenTxs,
+        tokenTapScript,
+        guardTapScript,
+        newState,
+        receiverTokenState,
+        changeTokenState,
+        satoshiChangeScript,
+        minterP2TR,
+    );
 
     const satoshiChangeAmount = revealTx.inputAmount - vsize * txParams.feeRate - Postage.TOKEN_POSTAGE - (changeTokenState === null ? 0 : Postage.TOKEN_POSTAGE);
 
@@ -257,3 +274,71 @@ export async function transfer(param: CatTxParams) {
     }
 }
 
+const calcVsize = async (
+    wallet: EcKeyService,
+    tokens: TokenContract[],
+    guardContract: GuardContract,
+    revealTx: btc.Transaction,
+    guardInfo: GuardInfo,
+    tokenTxs: Array<{
+        prevTx: btc.Transaction;
+        prevPrevTx: btc.Transaction;
+        prevTokenInputIndex: number;
+    }>,
+    tokenTapScript: string,
+    guardTapScript: string,
+    newState: ProtocolState,
+    receiverTokenState: CAT20State,
+    changeTokenState: null | CAT20State,
+    satoshisChangeScript: btc.Script,
+    minterP2TR: string,
+) => {
+    const txCtxs = getTxCtxMulti(
+        revealTx,
+        tokens.map((_, i) => i).concat([tokens.length]),
+        [
+            ...new Array(tokens.length).fill(Buffer.from(tokenTapScript, 'hex')),
+            Buffer.from(guardTapScript, 'hex'),
+        ],
+    );
+
+    const guardInputIndex = tokens.length;
+
+    const changeInfo: ChangeInfo = {
+        script: satoshisChangeScript.toHex(),
+        satoshis: int2ByteString(0n, 8n),
+    };
+    for (let i = 0; i < tokens.length; i++) {
+        await unlockToken(
+            wallet,
+            tokens[i],
+            i,
+            tokenTxs[i].prevTx,
+            tokenTxs[i].prevTokenInputIndex,
+            tokenTxs[i].prevPrevTx,
+            guardInfo,
+            revealTx,
+            minterP2TR,
+            txCtxs[i],
+            false,
+        );
+    }
+
+    await unlockGuard(
+        guardContract,
+        guardInfo,
+        guardInputIndex,
+        newState,
+        revealTx,
+        receiverTokenState,
+        changeTokenState,
+        changeInfo,
+        txCtxs[guardInputIndex],
+        false,
+    );
+
+    wallet.signTx(revealTx);
+    const vsize = revealTx.vsize;
+    resetTx(revealTx);
+    return vsize;
+};

@@ -38,7 +38,7 @@ describe("cat20-online", () => {
                 }
               }
             ]`;
-        const tokenContracts = tokenUtxoParse(tokenInputs)
+        const tokenContracts = tokenUtxoParse(tokenInputs) // 端上转换成dto再传入
 
         const tokenPrevTxs: TokenPrevTx[] = [
             {
@@ -58,7 +58,8 @@ describe("cat20-online", () => {
                 changeAddress: "bc1pnyd20hgcmte5seggdj98cy62eqa7ur7fy9lvx3k38qj85ttwdxpqft47ex", // FB找零地址
                 toAddress: "bc1pnyd20hgcmte5seggdj98cy62eqa7ur7fy9lvx3k38qj85ttwdxpqft47ex", // cat接收to地址
                 tokenAmount: 10, // cat20 number, 10 DOGE
-                tokenPrevTxs: tokenPrevTxs
+                tokenPrevTxs: tokenPrevTxs,
+                verifyScript: true
             }
         }
         const res = await transfer(param)
