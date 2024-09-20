@@ -38,8 +38,8 @@ export function tokenInfoParse(tokenStr: string, network: SupportedNetwork): Tok
     return token
 }
 
-export function feeUtxoParse(tokenUtxos: string): UTXO[] {
-    const utxos = JSON.parse(tokenUtxos);
+export function feeUtxoParse(feeUtxos: string): UTXO[] {
+    const utxos = JSON.parse(feeUtxos);
     return utxos.map((utxo: any) => {
         let scriptPk = btc.Script.fromAddress(utxo.address).toHex();
         return {
@@ -51,8 +51,8 @@ export function feeUtxoParse(tokenUtxos: string): UTXO[] {
     });
 }
 
-export function tokenUtxoParse(feeUtxos: string): Array<TokenContract> {
-    const utxos = JSON.parse(feeUtxos);
+export function tokenUtxoParse(tokenUtxos: string): Array<TokenContract> {
+    const utxos = JSON.parse(tokenUtxos);
 
     return utxos.map((c: any) => {
         const protocolState = ProtocolState.fromStateHashList(

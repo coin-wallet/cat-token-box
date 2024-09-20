@@ -32,6 +32,10 @@ export function validatePrevTx(metadata: TokenMetadata,
         }
     });
 
+    if (!input) {
+        return null
+    }
+
     const prevPrevTxId =
         prevTx.inputs[prevTokenInputIndex].prevTxId.toString('hex');
 
