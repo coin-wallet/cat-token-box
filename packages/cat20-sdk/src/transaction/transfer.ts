@@ -285,10 +285,13 @@ export async function transfer(param: CatTxParams) {
 
     ecKey.signTx(revealTx);
 
+    console.log("revealTx==>", revealTx.uncheckedSerialize())
+    console.log("commitTx==>", commitTx.uncheckedSerialize())
 
-    console.log("===========================")
-    console.log(revealTx)
-
+    return {
+        revealTx,
+        commitTx,
+    }
 
 }
 
@@ -335,7 +338,6 @@ export function createGuardContract(
         return null;
     }
     commitTx.outputs[2].satoshis -= 1;
-    // todo 实际数据需要放开 本地测试先注释
     wallet.signTx(commitTx);
 
     const contact: GuardContract = {
