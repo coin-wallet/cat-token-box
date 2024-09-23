@@ -1,17 +1,14 @@
 import {EcKeyService} from "../utils/eckey";
+import {btc, GuardContract, Postage, TokenContract,} from "../common";
 import {
-    btc,
     callToBufferList,
     getDummySigner,
     getDummyUTXO,
     getGuardsP2TR,
     getTokenContractP2TR,
-    GuardContract,
-    Postage,
-    TokenContract,
     toStateScript,
     verifyContract
-} from "../common";
+} from "../utils";
 import {
     CAT20,
     CAT20State,

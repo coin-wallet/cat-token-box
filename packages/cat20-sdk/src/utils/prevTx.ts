@@ -1,4 +1,5 @@
-import {btc, p2tr2Address, script2P2TR, SupportedNetwork, TokenMetadata} from "../common";
+import {btc, SupportedNetwork, TokenMetadata} from "../common";
+import {p2tr2Address, script2P2TR} from "./utils";
 
 export type TokenTx = {
     prevTx: btc.Transaction,
@@ -10,7 +11,7 @@ export function validatePrevTx(metadata: TokenMetadata,
                                prevTxHex: string,
                                prevPrevTxHex: string,
                                network: SupportedNetwork,
-):  TokenTx | null {
+): TokenTx | null {
 
     let prevTokenInputIndex = 0;
     const prevTx = new btc.Transaction(prevTxHex);
@@ -19,7 +20,7 @@ export function validatePrevTx(metadata: TokenMetadata,
 
         if (Array.isArray(witnesses) && witnesses.length > 2) {
             const lockingScriptBuffer = witnesses[witnesses.length - 2];
-            const { p2tr } = script2P2TR(lockingScriptBuffer);
+            const {p2tr} = script2P2TR(lockingScriptBuffer);
 
             const address = p2tr2Address(p2tr, network);
             if (

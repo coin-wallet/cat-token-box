@@ -1,5 +1,5 @@
 import {AddressType} from "./cat20Enum";
-import {TokenContract} from "./contact";
+import {TokenContract} from "./contract";
 
 export type CatTxParams = {
     privateKey: string;

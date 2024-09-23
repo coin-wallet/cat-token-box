@@ -13,29 +13,29 @@ describe("cat20 params", () => {
     })
 
     test("getFeeUtxos", async () => {
-        const feeUtxosStr = `[
-          {
-            "txid": "050fd76a622c8965570c310236580672ddd9aad9525a617c65b337412ec0a065",
-            "vout": 1,
-            "satoshi": 181724336,
-            "scriptPk": "5120f0513064fe1e5b5c31bedff43b943f2f1211d14ab2891687241b138d214888e3",
-            "address": "bc1p7pgnqe87red4cvd7ml6rh9pl9ufpr522k2y3dpeyrvfc6g2g3r3s3ae9dr"
-          },
-          {
-            "txid": "934677e1b69daea7f4f3fab53e6d9a70103089debf4126e9f0bfb7821864738f",
-            "vout": 0,
-            "satoshi": 5100000,
-            "scriptPk": "5120f0513064fe1e5b5c31bedff43b943f2f1211d14ab2891687241b138d214888e3",
-            "address": "bc1p7pgnqe87red4cvd7ml6rh9pl9ufpr522k2y3dpeyrvfc6g2g3r3s3ae9dr"
-          },
-          {
-            "txid": "c1083cb00478ebf1e4ec1951319e0f2bc8361aeb5a1b643cba86b31cfaf3b613",
-            "vout": 1,
-            "satoshi": 33684401,
-            "scriptPk": "5120f0513064fe1e5b5c31bedff43b943f2f1211d14ab2891687241b138d214888e3",
-            "address": "bc1p7pgnqe87red4cvd7ml6rh9pl9ufpr522k2y3dpeyrvfc6g2g3r3s3ae9dr"
-          }
-          ]`;
+        const feeUtxosStr = [
+            {
+                "txid": "050fd76a622c8965570c310236580672ddd9aad9525a617c65b337412ec0a065",
+                "vout": 1,
+                "satoshi": 181724336,
+                "scriptPk": "5120f0513064fe1e5b5c31bedff43b943f2f1211d14ab2891687241b138d214888e3",
+                "address": "bc1p7pgnqe87red4cvd7ml6rh9pl9ufpr522k2y3dpeyrvfc6g2g3r3s3ae9dr"
+            },
+            {
+                "txid": "934677e1b69daea7f4f3fab53e6d9a70103089debf4126e9f0bfb7821864738f",
+                "vout": 0,
+                "satoshi": 5100000,
+                "scriptPk": "5120f0513064fe1e5b5c31bedff43b943f2f1211d14ab2891687241b138d214888e3",
+                "address": "bc1p7pgnqe87red4cvd7ml6rh9pl9ufpr522k2y3dpeyrvfc6g2g3r3s3ae9dr"
+            },
+            {
+                "txid": "c1083cb00478ebf1e4ec1951319e0f2bc8361aeb5a1b643cba86b31cfaf3b613",
+                "vout": 1,
+                "satoshi": 33684401,
+                "scriptPk": "5120f0513064fe1e5b5c31bedff43b943f2f1211d14ab2891687241b138d214888e3",
+                "address": "bc1p7pgnqe87red4cvd7ml6rh9pl9ufpr522k2y3dpeyrvfc6g2g3r3s3ae9dr"
+            }
+        ];
         const feeUtxos = feeUtxoParse(feeUtxosStr)
         console.log(feeUtxos.length)
     })
@@ -98,7 +98,7 @@ describe("cat20 params", () => {
 
         const valid = validatePrevTx(metadata, prevTxHex, prevPrevTxHex, SupportedNetwork.fractalMainnet)
         console.log(valid)
-        expect(valid).toBe(true)
+        expect(valid != null).toBe(true)
 
     })
 
@@ -114,9 +114,8 @@ describe("cat20 params", () => {
         const metadata = tokenInfoParse(tokenStr, SupportedNetwork.fractalMainnet)
 
         const valid = validatePrevTx(metadata, prevTxHex, prevPrevTxHex, SupportedNetwork.fractalMainnet)
-        console.log(valid)
-        expect(valid).toBe(false)
 
+        expect(valid == null).toBe(true)
     })
 })
 ;

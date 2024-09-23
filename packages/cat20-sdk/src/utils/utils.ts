@@ -10,7 +10,7 @@ import {
     TxOutpoint,
 } from '@cat-protocol/cat-smartcontracts';
 
-import {btc} from './btc';
+import {btc, MinterType, SupportedNetwork} from '../common';
 import {
     bsv,
     ByteString,
@@ -27,7 +27,6 @@ import {
 import {Tap} from '@cmdcode/tapscript';
 import {randomBytes} from 'crypto';
 import Decimal from 'decimal.js';
-import {MinterType, SupportedNetwork} from './cat20Enum';
 
 const ISSUE_PUBKEY =
     '0250929b74c1a04954b78b4b6035e97a5e078a5a0f28ec96d547bfee9ace803ac0';
