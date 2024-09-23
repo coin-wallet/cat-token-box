@@ -3,7 +3,6 @@ import {TokenContract} from "./contract";
 
 export type CatTxParams = {
     privateKey: string;
-    addressType: AddressType,
     data: any;
 };
 
@@ -25,7 +24,7 @@ export interface TransferParams {
     tokens: TokenContract[],
     changeAddress: string,
     toAddress: string,
-    tokenAmount: number,
+    tokenAmount: string,
     tokenPrevTxs: TokenPrevTx[],
     verifyScript?: boolean,
 }

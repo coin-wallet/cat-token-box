@@ -1,4 +1,5 @@
 import {
+    AddressType,
     btc,
     CatTxParams,
     CHANGE_MIN_POSTAGE,
@@ -29,7 +30,7 @@ import {getTokenContractP2TR, resetTx, toP2tr, toStateScript, toTokenAddress, to
 
 
 export async function transfer(param: CatTxParams) {
-    const ecKey = new EcKeyService(param.privateKey, param.addressType)
+    const ecKey = new EcKeyService(param.privateKey, AddressType.P2TR)
 
     const txParams: TransferParams = param.data
 
@@ -64,6 +65,10 @@ export async function transfer(param: CatTxParams) {
     let feeUtxo = pickLargeFeeUtxo(feeUtxos);
 
     let tokens = txParams.tokens;
+    if (tokens.length > 4) {
+        console.error('Invalid tokens length, maximum 4 token contracts');
+        return;
+    }
     const commitResult = createGuardContract(
         ecKey,
         feeUtxo,
@@ -261,6 +266,8 @@ export async function transfer(param: CatTxParams) {
     }
 
     ecKey.signTx(revealTx);
+    console.info(commitTx.hash)
+    console.info(revealTx.hash)
 
     return {
         revealTx: revealTx.uncheckedSerialize(),

@@ -49,15 +49,14 @@ describe("cat20-online", () => {
 
         let param: CatTxParams = {
             privateKey: privateKey,
-            addressType: AddressType.P2TR,
             data: {
                 tokenMetadata: tokenMetadata,
                 tokens: tokenContracts,
                 feeInputs: feeInputs, // 只传一个input，支付两笔FB手续费
-                feeRate: 800,
+                feeRate: 1200,
                 changeAddress: "bc1pnyd20hgcmte5seggdj98cy62eqa7ur7fy9lvx3k38qj85ttwdxpqft47ex", // FB找零地址
                 toAddress: "bc1pnyd20hgcmte5seggdj98cy62eqa7ur7fy9lvx3k38qj85ttwdxpqft47ex", // cat接收to地址
-                tokenAmount: 10, // cat20 number, 10 DOGE
+                tokenAmount: "1.23", // cat20 number, 10 DOGE
                 tokenPrevTxs: tokenPrevTxs,
                 verifyScript: true
             }
