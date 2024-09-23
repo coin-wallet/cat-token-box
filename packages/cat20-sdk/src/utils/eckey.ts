@@ -119,6 +119,9 @@ export class EcKeyService {
                     undefined,
                     undefined,
                 );
+                if (!signatures) {
+                    throw new Error('Could not sign input');
+                }
 
                 tx.applySignature(signatures[0]);
             } else if (input.output.script.isTaproot() && !input.hasWitnesses()) {
@@ -131,7 +134,9 @@ export class EcKeyService {
                     undefined,
                     undefined,
                 );
-
+                if (signatures.length === 0) {
+                    throw new Error('Could not sign input');
+                }
                 tx.applySignature(signatures[0]);
             }
         }
