@@ -44,11 +44,12 @@ export async function transfer(param: CatTxParams) {
     let amount: bigint;
     try {
         receiver = btc.Address.fromString(txParams.toAddress);
-        if (receiver.type !== 'taproot') {
-           throw new Error(`Invalid address type: ${receiver.type}`);
-        }
     } catch (error) {
         throw new Error(`Invalid receiver address: ${txParams.toAddress}`);
+    }
+
+    if (receiver.type !== 'taproot') {
+        throw new Error(`Invalid address type: ${receiver.type}`);
     }
 
     const scaledInfo = scaleConfig(metadata.info as OpenMinterTokenInfo);
