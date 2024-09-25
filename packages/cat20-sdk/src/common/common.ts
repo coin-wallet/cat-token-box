@@ -19,7 +19,7 @@ export type TokenPrevTx = {
 // transfer
 export interface TransferParams {
     tokenMetadata: string
-    feeInputs: UtxoInput[]
+    feeInput: UtxoInput
     feeRate: number,
     tokens: TokenContract[],
     changeAddress: string,
@@ -27,6 +27,7 @@ export interface TransferParams {
     tokenAmount: string,
     tokenPrevTxs: TokenPrevTx[],
     verifyScript?: boolean,
+    guard? : string,
 }
 
 export type UtxoInput = {

@@ -61,14 +61,11 @@ export async function transfer(param: CatTxParams) {
         console.error(`Invalid receiver address:  `, txParams.tokenAmount);
         return;
     }
-    const feeUtxos = feeUtxoParse(param.data.feeInputs)
-    let feeUtxo = pickLargeFeeUtxo(feeUtxos);
+
+    const feeUtxo = feeUtxoParse(param.data.feeInput)
 
     let tokens = txParams.tokens;
-    if (tokens.length > 4) {
-        console.error('Invalid tokens length, maximum 4 token contracts');
-        return;
-    }
+
     const commitResult = createGuardContract(
         ecKey,
         feeUtxo,
@@ -109,7 +106,7 @@ export async function transfer(param: CatTxParams) {
         outputIndex: 2,
         script: commitTx.outputs[2].script.toHex(),
         satoshis: commitTx.outputs[2].satoshis,
-    };
+    }
 
     const inputUtxos = [
         ...tokens.map((t) => t.utxo),
@@ -156,6 +153,7 @@ export async function transfer(param: CatTxParams) {
 
     let tokenTxs: TokenTx[] = []
     if (txParams.tokenPrevTxs.length !== tokens.length) {
+        console.error('Invalid tokenPrevTxs length');
         return null
     }
 
@@ -164,6 +162,7 @@ export async function transfer(param: CatTxParams) {
         const prevPrevTx = txParams.tokenPrevTxs[i].prevPrevTx;
         const res = validatePrevTx(metadata, prevTx, prevPrevTx, SupportedNetwork.fractalMainnet)
         if (res === null) {
+            console.error('Invalid prevPrevTx');
             return null
         }
         tokenTxs.push(res)
@@ -266,9 +265,6 @@ export async function transfer(param: CatTxParams) {
     }
 
     ecKey.signTx(revealTx);
-    console.info(commitTx.hash)
-    console.info(revealTx.hash)
-
     return {
         revealTx: revealTx.uncheckedSerialize(),
         commitTx: commitTx.uncheckedSerialize(),

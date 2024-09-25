@@ -1,4 +1,4 @@
-import {btc, OpenMinterTokenInfo, SupportedNetwork, TokenContract, TokenMetadata,} from "../common";
+import {btc, OpenMinterTokenInfo, SupportedNetwork, TokenContract, TokenMetadata, UtxoInput,} from "../common";
 import {ProtocolState, ProtocolStateList} from "@cat-protocol/cat-smartcontracts";
 import {UTXO} from "scrypt-ts";
 import {getTokenContractP2TR, p2tr2Address, scaleByDecimals, toP2tr} from "./utils";
@@ -28,16 +28,14 @@ export function tokenInfoParse(tokenStr: string, network: SupportedNetwork): Tok
     return token
 }
 
-export function feeUtxoParse(utxos: any[]): UTXO[] {
-    return utxos.map((utxo: any) => {
-        let scriptPk = btc.Script.fromAddress(utxo.address).toHex();
-        return {
-            txId: utxo.txId,
-            outputIndex: utxo.vOut,
-            script: scriptPk,
-            satoshis: utxo.amount,
-        };
-    });
+export function feeUtxoParse(utxo: UtxoInput): UTXO {
+    let scriptPk = btc.Script.fromAddress(utxo.address).toHex();
+    return {
+        txId: utxo.txId,
+        outputIndex: utxo.vOut,
+        script: scriptPk,
+        satoshis: utxo.amount,
+    };
 }
 
 
