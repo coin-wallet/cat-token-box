@@ -65,8 +65,7 @@ export function createGuardContract(
         .change(changeAddress);
 
     if (commitTx.getChangeOutput() === null) {
-        console.error('Insufficient satoshis balance!');
-        return null;
+        throw new Error('Insufficient satoshis balance!');
     }
     commitTx.outputs[2].satoshis -= 1;
     wallet.signTx(commitTx);
@@ -171,8 +170,7 @@ export async function unlockToken(
             witnesses,
         );
         if (typeof res === 'string') {
-            console.error('unlocking token contract failed!', res);
-            return false;
+            throw new Error(`unlocking token contract failed! ${res}`);
         }
         return true;
     }
@@ -254,8 +252,7 @@ export async function unlockGuard(
             witnesses,
         );
         if (typeof res === 'string') {
-            console.error('unlocking guard contract failed!', res);
-            return false;
+            throw new Error(`unlocking guard contract failed! ${res}`);
         }
         return true;
     }

@@ -45,12 +45,10 @@ export async function transfer(param: CatTxParams) {
     try {
         receiver = btc.Address.fromString(txParams.toAddress);
         if (receiver.type !== 'taproot') {
-            console.error(`Invalid address type: ${receiver.type}`);
-            return;
+           throw new Error(`Invalid address type: ${receiver.type}`);
         }
     } catch (error) {
-        console.error(`Invalid receiver address:  `, txParams.toAddress);
-        return;
+        throw new Error(`Invalid receiver address: ${txParams.toAddress}`);
     }
 
     const scaledInfo = scaleConfig(metadata.info as OpenMinterTokenInfo);
@@ -58,8 +56,7 @@ export async function transfer(param: CatTxParams) {
         const d = new Decimal(txParams.tokenAmount).mul(Math.pow(10, scaledInfo.decimals));
         amount = BigInt(d.toString());
     } catch (error) {
-        console.error(`Invalid receiver address:  `, txParams.tokenAmount);
-        return;
+        throw new Error(`Invalid receiver address:  ${txParams.tokenAmount}`);
     }
 
     const feeUtxo = feeUtxoParse(param.data.feeInput)
@@ -115,7 +112,7 @@ export async function transfer(param: CatTxParams) {
     ];
 
     if (inputUtxos.length > MAX_INPUT) {
-        throw new Error('to much input');
+        throw new Error('Too many inputs, max 4 token inputs');
     }
 
     const revealTx = new btc.Transaction()
@@ -153,8 +150,7 @@ export async function transfer(param: CatTxParams) {
 
     let tokenTxs: TokenTx[] = []
     if (txParams.tokenPrevTxs.length !== tokens.length) {
-        console.error('Invalid tokenPrevTxs length');
-        return null
+        throw new Error('Invalid tokenPrevTxs length');
     }
 
     for (let i = 0; i < tokens.length; i++) {
@@ -162,8 +158,7 @@ export async function transfer(param: CatTxParams) {
         const prevPrevTx = txParams.tokenPrevTxs[i].prevPrevTx;
         const res = validatePrevTx(metadata, prevTx, prevPrevTx, SupportedNetwork.fractalMainnet)
         if (res === null) {
-            console.error('Invalid prevPrevTx');
-            return null
+            throw new Error('Invalid prevPrevTx');
         }
         tokenTxs.push(res)
     }
@@ -203,8 +198,7 @@ export async function transfer(param: CatTxParams) {
     const satoshiChangeAmount = revealTx.inputAmount - vsize * txParams.feeRate - Postage.TOKEN_POSTAGE - (changeTokenState === null ? 0 : Postage.TOKEN_POSTAGE);
 
     if (satoshiChangeAmount <= CHANGE_MIN_POSTAGE) {
-        console.error('Insufficient satoshis balance!');
-        return null;
+        throw new Error('Insufficient satoshis balance!');
     }
 
     const satoshiChangeOutputIndex = changeTokenState === null ? 2 : 3;
