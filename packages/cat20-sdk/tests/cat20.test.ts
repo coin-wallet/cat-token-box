@@ -1,5 +1,5 @@
 import {transfer} from "../src/transaction/transfer";
-import {AddressType, CatTxParams, TokenPrevTx} from "../src/common";
+import {AddressType, SignTxParams, TokenPrevTx} from "../src/common";
 import {tokenUtxoParse} from "../src/utils/paramsUtils";
 
 describe("cat20", () => {
@@ -47,7 +47,7 @@ describe("cat20", () => {
             }
         ]
 
-        let param: CatTxParams = {
+        let param: SignTxParams = {
             privateKey: privateKey,
             addressType: AddressType.P2TR,
             data: {

@@ -1,9 +1,9 @@
 import {AddressType} from "./cat20Enum";
 import {TokenContract} from "./contract";
 
-export type CatTxParams = {
+export type SignTxParams = {
     privateKey: string;
-    data: any;
+    data: TransferParams;
 };
 
 export type TxIdHex = {
@@ -19,7 +19,7 @@ export type TokenPrevTx = {
 // transfer
 export interface TransferParams {
     tokenMetadata: string
-    feeInput: UtxoInput
+    feeInputs: UtxoInput[]
     feeRate: number,
     tokens: TokenContract[],
     changeAddress: string,

@@ -332,8 +332,8 @@ export function verifyContract(
 ): string | true {
     const interpreter = new btc.Script.Interpreter();
     const flags =
-        btc.Script.Interpreter.SCRIPT_VERIFY_WITNESS |
-        btc.Script.Interpreter.SCRIPT_VERIFY_TAPROOT;
+        btc.Script.Interpreter.SCRIPT_VERIFY_WITNESS
+        | btc.Script.Interpreter.SCRIPT_VERIFY_TAPROOT;
     const res = interpreter.verify(
         new btc.Script(''),
         new btc.Script(utxo.script),

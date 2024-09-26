@@ -28,14 +28,16 @@ export function tokenInfoParse(tokenStr: string, network: SupportedNetwork): Tok
     return token
 }
 
-export function feeUtxoParse(utxo: UtxoInput): UTXO {
-    let scriptPk = btc.Script.fromAddress(utxo.address).toHex();
-    return {
-        txId: utxo.txId,
-        outputIndex: utxo.vOut,
-        script: scriptPk,
-        satoshis: utxo.amount,
-    };
+export function feeUtxoParse(utxos: UtxoInput[]): UTXO[] {
+    return utxos.map((utxo: any) => {
+        let scriptPk = btc.Script.fromAddress(utxo.address).toHex();
+        return {
+            txId: utxo.txId,
+            outputIndex: utxo.vOut,
+            script: scriptPk,
+            satoshis: utxo.amount,
+        };
+    });
 }
 
 

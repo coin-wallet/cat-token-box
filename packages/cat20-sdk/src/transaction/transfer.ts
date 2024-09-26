@@ -1,7 +1,7 @@
 import {
     AddressType,
     btc,
-    CatTxParams,
+    SignTxParams,
     CHANGE_MIN_POSTAGE,
     GuardContract,
     OpenMinterTokenInfo, Postage,
@@ -24,13 +24,14 @@ import {
 } from "@cat-protocol/cat-smartcontracts";
 import Decimal from 'decimal.js';
 import {TokenTx, validatePrevTx} from "../utils/prevTx";
-import {pickLargeFeeUtxo} from "../utils/utxo";
 import {createGuardContract, unlockGuard, unlockToken} from "./functions";
 import {getTokenContractP2TR, resetTx, toP2tr, toStateScript, toTokenAddress, toTxOutpoint,} from "../utils";
+import {mergeFee} from "./merge";
 
 
-export async function transfer(param: CatTxParams) {
-    const ecKey = new EcKeyService(param.privateKey, AddressType.P2TR)
+export async function transfer(param: SignTxParams) {
+    // todo: add addresstype param if want to allow segwit addresses
+    const ecKey = new EcKeyService(param.privateKey, AddressType.P2TR);
 
     const txParams: TransferParams = param.data
 
@@ -57,10 +58,16 @@ export async function transfer(param: CatTxParams) {
         const d = new Decimal(txParams.tokenAmount).mul(Math.pow(10, scaledInfo.decimals));
         amount = BigInt(d.toString());
     } catch (error) {
-        throw new Error(`Invalid receiver address:  ${txParams.tokenAmount}`);
+        throw new Error(`Invalid token amount:  ${txParams.tokenAmount}`);
     }
 
-    const feeUtxo = feeUtxoParse(param.data.feeInput)
+    const feeUtxos = feeUtxoParse(param.data.feeInputs)
+    let feeUtxo = feeUtxos[0]
+
+    let mergeTx: btc.Transaction
+    if (feeUtxos.length > 1){
+        ({feeUtxo, mergeTx} = mergeFee(ecKey, feeUtxos, txParams.feeRate))
+    }
 
     let tokens = txParams.tokens;
 
@@ -259,8 +266,15 @@ export async function transfer(param: CatTxParams) {
         return null;
     }
 
+    // console.log(
+    //     mergeTx ? mergeTx.getFee() : 0,
+    //     revealTx.getFee(),
+    //     commitTx.getFee(),
+    // );
+    //
     ecKey.signTx(revealTx);
     return {
+        mergeTx: mergeTx ? mergeTx.uncheckedSerialize() : null,
         revealTx: revealTx.uncheckedSerialize(),
         commitTx: commitTx.uncheckedSerialize(),
     }

@@ -2,6 +2,7 @@ import {EcKeyService} from "../src/utils/eckey";
 import {AddressType, btc} from "../src/common";
 import {ownerAddressToPubKeyHash} from "@cat-protocol/cat-tracker/dist/common/utils";
 import {hash160} from "scrypt-ts";
+import {toTokenAddress} from "../src/utils";
 
 describe("bitcoin", () => {
     test("wallet service", async () => {
@@ -36,12 +37,10 @@ describe("bitcoin", () => {
         }
 
         const segwit = 'bc1q0k0ukqk4lt0cgsqmzs06uwaeqyakz2w3tccxv7'
-        const segwithHash = ownerAddressToPubKeyHash(segwit)
-        console.log("Segwit PubKeyHash from address",segwithHash)
+        console.log("Segwit PubKeyHash from address", toTokenAddress(segwit))
 
         const taproot = 'bc1pnyd20hgcmte5seggdj98cy62eqa7ur7fy9lvx3k38qj85ttwdxpqft47ex'
-        const addr = btc.Address(taproot)
-        console.log("Taproot PubKeyHash from address", hash160(addr.toObject().hash))
+        console.log("Taproot PubKeyHash from address", toTokenAddress(taproot))
 
 
         const outputScript = tx.outputs[1].script
